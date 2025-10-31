@@ -12,7 +12,7 @@
 .DEFAULT_GOAL := help
 
 # Compose command (can be overridden from environment)
-COMPOSE ?= docker compose -f compose.yaml -f compose.override.yaml
+COMPOSE ?= docker compose
 
 # The main PHP/service name used for exec/logs; change if your service is named differently
 PHP_SERVICE ?= php
@@ -45,6 +45,19 @@ sync-fork:
 	@curl -sSL https://raw.githubusercontent.com/coopTilleuls/template-sync/main/template-sync.sh | sh -s -- https://github.com/api-platform/api-platform
 
 restart: down up
+
+entity:
+	@$(COMPOSE) exec $(PHP_SERVICE) php bin/console make:entity
+
+api-entity:
+	@$(COMPOSE) exec $(PHP_SERVICE) php bin/console make:entity --api-resource
+
+bash:
+	@$(COMPOSE) exec -it $(PHP_SERVICE) bash
+
+migration-diff:
+	@$(COMPOSE) exec $(PHP_SERVICE) php bin/console doctrine:migrations:diff
+
 
 # Follow logs for the PHP/API service
 logs:
