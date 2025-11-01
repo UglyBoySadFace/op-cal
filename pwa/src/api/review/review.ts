@@ -4,22 +4,6 @@
  * Hello API Platform
  * OpenAPI spec version: 1.0.0
  */
-import { useMutation, useQuery } from "@tanstack/react-query";
-import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
-  MutationFunction,
-  QueryClient,
-  QueryFunction,
-  QueryKey,
-  UndefinedInitialDataOptions,
-  UseMutationOptions,
-  UseMutationResult,
-  UseQueryOptions,
-  UseQueryResult,
-} from "@tanstack/react-query";
-
 import type {
   ApiReviewsGetCollection200,
   ApiReviewsGetCollectionParams,
@@ -61,8 +45,6 @@ type NonReadonly<T> = [T] extends [UnionToIntersection<T>]
     }
   : DistributeReadOnlyOverUnions<T>;
 
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
 /**
  * Retrieves the collection of Review resources.
  * @summary Retrieves the collection of Review resources.
@@ -93,8 +75,8 @@ export const getApiReviewsGetCollectionUrl = (
   const stringifiedParams = normalizedParams.toString();
 
   return stringifiedParams.length > 0
-    ? `http://localhost:3000/reviews?${stringifiedParams}`
-    : `http://localhost:3000/reviews`;
+    ? `https://localhost:3000/reviews?${stringifiedParams}`
+    : `https://localhost:3000/reviews`;
 };
 
 export const apiReviewsGetCollection = async (
@@ -109,161 +91,6 @@ export const apiReviewsGetCollection = async (
     },
   );
 };
-
-export const getApiReviewsGetCollectionQueryKey = (
-  params?: ApiReviewsGetCollectionParams,
-) => {
-  return [
-    `http://localhost:3000/reviews`,
-    ...(params ? [params] : []),
-  ] as const;
-};
-
-export const getApiReviewsGetCollectionQueryOptions = <
-  TData = Awaited<ReturnType<typeof apiReviewsGetCollection>>,
-  TError = unknown,
->(
-  params?: ApiReviewsGetCollectionParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof apiReviewsGetCollection>>,
-        TError,
-        TData
-      >
-    >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
-
-  const queryKey =
-    queryOptions?.queryKey ?? getApiReviewsGetCollectionQueryKey(params);
-
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof apiReviewsGetCollection>>
-  > = ({ signal }) =>
-    apiReviewsGetCollection(params, { signal, ...requestOptions });
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof apiReviewsGetCollection>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type ApiReviewsGetCollectionQueryResult = NonNullable<
-  Awaited<ReturnType<typeof apiReviewsGetCollection>>
->;
-export type ApiReviewsGetCollectionQueryError = unknown;
-
-export function useApiReviewsGetCollection<
-  TData = Awaited<ReturnType<typeof apiReviewsGetCollection>>,
-  TError = unknown,
->(
-  params: undefined | ApiReviewsGetCollectionParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof apiReviewsGetCollection>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof apiReviewsGetCollection>>,
-          TError,
-          Awaited<ReturnType<typeof apiReviewsGetCollection>>
-        >,
-        "initialData"
-      >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-  queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useApiReviewsGetCollection<
-  TData = Awaited<ReturnType<typeof apiReviewsGetCollection>>,
-  TError = unknown,
->(
-  params?: ApiReviewsGetCollectionParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof apiReviewsGetCollection>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof apiReviewsGetCollection>>,
-          TError,
-          Awaited<ReturnType<typeof apiReviewsGetCollection>>
-        >,
-        "initialData"
-      >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useApiReviewsGetCollection<
-  TData = Awaited<ReturnType<typeof apiReviewsGetCollection>>,
-  TError = unknown,
->(
-  params?: ApiReviewsGetCollectionParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof apiReviewsGetCollection>>,
-        TError,
-        TData
-      >
-    >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-};
-/**
- * @summary Retrieves the collection of Review resources.
- */
-
-export function useApiReviewsGetCollection<
-  TData = Awaited<ReturnType<typeof apiReviewsGetCollection>>,
-  TError = unknown,
->(
-  params?: ApiReviewsGetCollectionParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof apiReviewsGetCollection>>,
-        TError,
-        TData
-      >
-    >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-} {
-  const queryOptions = getApiReviewsGetCollectionQueryOptions(params, options);
-
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-    TData,
-    TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey;
-
-  return query;
-}
 
 /**
  * Creates a Review resource.
@@ -311,7 +138,7 @@ export type apiReviewsPostResponse =
   | apiReviewsPostResponseError;
 
 export const getApiReviewsPostUrl = () => {
-  return `http://localhost:3000/reviews`;
+  return `https://localhost:3000/reviews`;
 };
 
 export const apiReviewsPost = async (
@@ -326,89 +153,6 @@ export const apiReviewsPost = async (
   });
 };
 
-export const getApiReviewsPostMutationOptions = <
-  TError =
-    | ErrorJsonld
-    | Error
-    | ConstraintViolationJsonldJsonld
-    | ConstraintViolationJson,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof apiReviewsPost>>,
-    TError,
-    { data: NonReadonly<ReviewJsonld> },
-    TContext
-  >;
-  request?: SecondParameter<typeof customFetch>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof apiReviewsPost>>,
-  TError,
-  { data: NonReadonly<ReviewJsonld> },
-  TContext
-> => {
-  const mutationKey = ["apiReviewsPost"];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      "mutationKey" in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof apiReviewsPost>>,
-    { data: NonReadonly<ReviewJsonld> }
-  > = (props) => {
-    const { data } = props ?? {};
-
-    return apiReviewsPost(data, requestOptions);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type ApiReviewsPostMutationResult = NonNullable<
-  Awaited<ReturnType<typeof apiReviewsPost>>
->;
-export type ApiReviewsPostMutationBody = NonReadonly<ReviewJsonld>;
-export type ApiReviewsPostMutationError =
-  | ErrorJsonld
-  | Error
-  | ConstraintViolationJsonldJsonld
-  | ConstraintViolationJson;
-
-/**
- * @summary Creates a Review resource.
- */
-export const useApiReviewsPost = <
-  TError =
-    | ErrorJsonld
-    | Error
-    | ConstraintViolationJsonldJsonld
-    | ConstraintViolationJson,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof apiReviewsPost>>,
-      TError,
-      { data: NonReadonly<ReviewJsonld> },
-      TContext
-    >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-  queryClient?: QueryClient,
-): UseMutationResult<
-  Awaited<ReturnType<typeof apiReviewsPost>>,
-  TError,
-  { data: NonReadonly<ReviewJsonld> },
-  TContext
-> => {
-  const mutationOptions = getApiReviewsPostMutationOptions(options);
-
-  return useMutation(mutationOptions, queryClient);
-};
 /**
  * Retrieves a Review resource.
  * @summary Retrieves a Review resource.
@@ -443,7 +187,7 @@ export type apiReviewsIdGetResponse =
   | apiReviewsIdGetResponseError;
 
 export const getApiReviewsIdGetUrl = (id: string) => {
-  return `http://localhost:3000/reviews/${id}`;
+  return `https://localhost:3000/reviews/${id}`;
 };
 
 export const apiReviewsIdGet = async (
@@ -455,159 +199,6 @@ export const apiReviewsIdGet = async (
     method: "GET",
   });
 };
-
-export const getApiReviewsIdGetQueryKey = (id?: string) => {
-  return [`http://localhost:3000/reviews/${id}`] as const;
-};
-
-export const getApiReviewsIdGetQueryOptions = <
-  TData = Awaited<ReturnType<typeof apiReviewsIdGet>>,
-  TError = ErrorJsonld | Error,
->(
-  id: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof apiReviewsIdGet>>,
-        TError,
-        TData
-      >
-    >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
-
-  const queryKey = queryOptions?.queryKey ?? getApiReviewsIdGetQueryKey(id);
-
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof apiReviewsIdGet>>> = ({
-    signal,
-  }) => apiReviewsIdGet(id, { signal, ...requestOptions });
-
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!id,
-    ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof apiReviewsIdGet>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type ApiReviewsIdGetQueryResult = NonNullable<
-  Awaited<ReturnType<typeof apiReviewsIdGet>>
->;
-export type ApiReviewsIdGetQueryError = ErrorJsonld | Error;
-
-export function useApiReviewsIdGet<
-  TData = Awaited<ReturnType<typeof apiReviewsIdGet>>,
-  TError = ErrorJsonld | Error,
->(
-  id: string,
-  options: {
-    query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof apiReviewsIdGet>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof apiReviewsIdGet>>,
-          TError,
-          Awaited<ReturnType<typeof apiReviewsIdGet>>
-        >,
-        "initialData"
-      >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-  queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useApiReviewsIdGet<
-  TData = Awaited<ReturnType<typeof apiReviewsIdGet>>,
-  TError = ErrorJsonld | Error,
->(
-  id: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof apiReviewsIdGet>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof apiReviewsIdGet>>,
-          TError,
-          Awaited<ReturnType<typeof apiReviewsIdGet>>
-        >,
-        "initialData"
-      >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useApiReviewsIdGet<
-  TData = Awaited<ReturnType<typeof apiReviewsIdGet>>,
-  TError = ErrorJsonld | Error,
->(
-  id: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof apiReviewsIdGet>>,
-        TError,
-        TData
-      >
-    >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-};
-/**
- * @summary Retrieves a Review resource.
- */
-
-export function useApiReviewsIdGet<
-  TData = Awaited<ReturnType<typeof apiReviewsIdGet>>,
-  TError = ErrorJsonld | Error,
->(
-  id: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof apiReviewsIdGet>>,
-        TError,
-        TData
-      >
-    >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-} {
-  const queryOptions = getApiReviewsIdGetQueryOptions(id, options);
-
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-    TData,
-    TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey;
-
-  return query;
-}
 
 /**
  * Removes the Review resource.
@@ -644,7 +235,7 @@ export type apiReviewsIdDeleteResponse =
   | apiReviewsIdDeleteResponseError;
 
 export const getApiReviewsIdDeleteUrl = (id: string) => {
-  return `http://localhost:3000/reviews/${id}`;
+  return `https://localhost:3000/reviews/${id}`;
 };
 
 export const apiReviewsIdDelete = async (
@@ -657,77 +248,6 @@ export const apiReviewsIdDelete = async (
   });
 };
 
-export const getApiReviewsIdDeleteMutationOptions = <
-  TError = ErrorJsonld | Error,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof apiReviewsIdDelete>>,
-    TError,
-    { id: string },
-    TContext
-  >;
-  request?: SecondParameter<typeof customFetch>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof apiReviewsIdDelete>>,
-  TError,
-  { id: string },
-  TContext
-> => {
-  const mutationKey = ["apiReviewsIdDelete"];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      "mutationKey" in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof apiReviewsIdDelete>>,
-    { id: string }
-  > = (props) => {
-    const { id } = props ?? {};
-
-    return apiReviewsIdDelete(id, requestOptions);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type ApiReviewsIdDeleteMutationResult = NonNullable<
-  Awaited<ReturnType<typeof apiReviewsIdDelete>>
->;
-
-export type ApiReviewsIdDeleteMutationError = ErrorJsonld | Error;
-
-/**
- * @summary Removes the Review resource.
- */
-export const useApiReviewsIdDelete = <
-  TError = ErrorJsonld | Error,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof apiReviewsIdDelete>>,
-      TError,
-      { id: string },
-      TContext
-    >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-  queryClient?: QueryClient,
-): UseMutationResult<
-  Awaited<ReturnType<typeof apiReviewsIdDelete>>,
-  TError,
-  { id: string },
-  TContext
-> => {
-  const mutationOptions = getApiReviewsIdDeleteMutationOptions(options);
-
-  return useMutation(mutationOptions, queryClient);
-};
 /**
  * Updates the Review resource.
  * @summary Updates the Review resource.
@@ -786,7 +306,7 @@ export type apiReviewsIdPatchResponse =
   | apiReviewsIdPatchResponseError;
 
 export const getApiReviewsIdPatchUrl = (id: string) => {
-  return `http://localhost:3000/reviews/${id}`;
+  return `https://localhost:3000/reviews/${id}`;
 };
 
 export const apiReviewsIdPatch = async (
@@ -803,88 +323,4 @@ export const apiReviewsIdPatch = async (
     },
     body: JSON.stringify(review),
   });
-};
-
-export const getApiReviewsIdPatchMutationOptions = <
-  TError =
-    | ErrorJsonld
-    | Error
-    | ConstraintViolationJsonldJsonld
-    | ConstraintViolationJson,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof apiReviewsIdPatch>>,
-    TError,
-    { id: string; data: NonReadonly<Review> },
-    TContext
-  >;
-  request?: SecondParameter<typeof customFetch>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof apiReviewsIdPatch>>,
-  TError,
-  { id: string; data: NonReadonly<Review> },
-  TContext
-> => {
-  const mutationKey = ["apiReviewsIdPatch"];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      "mutationKey" in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof apiReviewsIdPatch>>,
-    { id: string; data: NonReadonly<Review> }
-  > = (props) => {
-    const { id, data } = props ?? {};
-
-    return apiReviewsIdPatch(id, data, requestOptions);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type ApiReviewsIdPatchMutationResult = NonNullable<
-  Awaited<ReturnType<typeof apiReviewsIdPatch>>
->;
-export type ApiReviewsIdPatchMutationBody = NonReadonly<Review>;
-export type ApiReviewsIdPatchMutationError =
-  | ErrorJsonld
-  | Error
-  | ConstraintViolationJsonldJsonld
-  | ConstraintViolationJson;
-
-/**
- * @summary Updates the Review resource.
- */
-export const useApiReviewsIdPatch = <
-  TError =
-    | ErrorJsonld
-    | Error
-    | ConstraintViolationJsonldJsonld
-    | ConstraintViolationJson,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof apiReviewsIdPatch>>,
-      TError,
-      { id: string; data: NonReadonly<Review> },
-      TContext
-    >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-  queryClient?: QueryClient,
-): UseMutationResult<
-  Awaited<ReturnType<typeof apiReviewsIdPatch>>,
-  TError,
-  { id: string; data: NonReadonly<Review> },
-  TContext
-> => {
-  const mutationOptions = getApiReviewsIdPatchMutationOptions(options);
-
-  return useMutation(mutationOptions, queryClient);
 };

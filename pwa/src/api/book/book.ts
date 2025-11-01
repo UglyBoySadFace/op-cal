@@ -4,22 +4,6 @@
  * Hello API Platform
  * OpenAPI spec version: 1.0.0
  */
-import { useMutation, useQuery } from "@tanstack/react-query";
-import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
-  MutationFunction,
-  QueryClient,
-  QueryFunction,
-  QueryKey,
-  UndefinedInitialDataOptions,
-  UseMutationOptions,
-  UseMutationResult,
-  UseQueryOptions,
-  UseQueryResult,
-} from "@tanstack/react-query";
-
 import type {
   ApiBooksGetCollection200,
   ApiBooksGetCollectionParams,
@@ -61,8 +45,6 @@ type NonReadonly<T> = [T] extends [UnionToIntersection<T>]
     }
   : DistributeReadOnlyOverUnions<T>;
 
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
 /**
  * Retrieves the collection of Book resources.
  * @summary Retrieves the collection of Book resources.
@@ -93,8 +75,8 @@ export const getApiBooksGetCollectionUrl = (
   const stringifiedParams = normalizedParams.toString();
 
   return stringifiedParams.length > 0
-    ? `http://localhost:3000/books?${stringifiedParams}`
-    : `http://localhost:3000/books`;
+    ? `https://localhost:3000/books?${stringifiedParams}`
+    : `https://localhost:3000/books`;
 };
 
 export const apiBooksGetCollection = async (
@@ -109,158 +91,6 @@ export const apiBooksGetCollection = async (
     },
   );
 };
-
-export const getApiBooksGetCollectionQueryKey = (
-  params?: ApiBooksGetCollectionParams,
-) => {
-  return [`http://localhost:3000/books`, ...(params ? [params] : [])] as const;
-};
-
-export const getApiBooksGetCollectionQueryOptions = <
-  TData = Awaited<ReturnType<typeof apiBooksGetCollection>>,
-  TError = unknown,
->(
-  params?: ApiBooksGetCollectionParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof apiBooksGetCollection>>,
-        TError,
-        TData
-      >
-    >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
-
-  const queryKey =
-    queryOptions?.queryKey ?? getApiBooksGetCollectionQueryKey(params);
-
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof apiBooksGetCollection>>
-  > = ({ signal }) =>
-    apiBooksGetCollection(params, { signal, ...requestOptions });
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof apiBooksGetCollection>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type ApiBooksGetCollectionQueryResult = NonNullable<
-  Awaited<ReturnType<typeof apiBooksGetCollection>>
->;
-export type ApiBooksGetCollectionQueryError = unknown;
-
-export function useApiBooksGetCollection<
-  TData = Awaited<ReturnType<typeof apiBooksGetCollection>>,
-  TError = unknown,
->(
-  params: undefined | ApiBooksGetCollectionParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof apiBooksGetCollection>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof apiBooksGetCollection>>,
-          TError,
-          Awaited<ReturnType<typeof apiBooksGetCollection>>
-        >,
-        "initialData"
-      >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-  queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useApiBooksGetCollection<
-  TData = Awaited<ReturnType<typeof apiBooksGetCollection>>,
-  TError = unknown,
->(
-  params?: ApiBooksGetCollectionParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof apiBooksGetCollection>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof apiBooksGetCollection>>,
-          TError,
-          Awaited<ReturnType<typeof apiBooksGetCollection>>
-        >,
-        "initialData"
-      >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useApiBooksGetCollection<
-  TData = Awaited<ReturnType<typeof apiBooksGetCollection>>,
-  TError = unknown,
->(
-  params?: ApiBooksGetCollectionParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof apiBooksGetCollection>>,
-        TError,
-        TData
-      >
-    >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-};
-/**
- * @summary Retrieves the collection of Book resources.
- */
-
-export function useApiBooksGetCollection<
-  TData = Awaited<ReturnType<typeof apiBooksGetCollection>>,
-  TError = unknown,
->(
-  params?: ApiBooksGetCollectionParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof apiBooksGetCollection>>,
-        TError,
-        TData
-      >
-    >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-} {
-  const queryOptions = getApiBooksGetCollectionQueryOptions(params, options);
-
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-    TData,
-    TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey;
-
-  return query;
-}
 
 /**
  * Creates a Book resource.
@@ -308,7 +138,7 @@ export type apiBooksPostResponse =
   | apiBooksPostResponseError;
 
 export const getApiBooksPostUrl = () => {
-  return `http://localhost:3000/books`;
+  return `https://localhost:3000/books`;
 };
 
 export const apiBooksPost = async (
@@ -323,89 +153,6 @@ export const apiBooksPost = async (
   });
 };
 
-export const getApiBooksPostMutationOptions = <
-  TError =
-    | ErrorJsonld
-    | Error
-    | ConstraintViolationJsonldJsonld
-    | ConstraintViolationJson,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof apiBooksPost>>,
-    TError,
-    { data: NonReadonly<BookJsonld> },
-    TContext
-  >;
-  request?: SecondParameter<typeof customFetch>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof apiBooksPost>>,
-  TError,
-  { data: NonReadonly<BookJsonld> },
-  TContext
-> => {
-  const mutationKey = ["apiBooksPost"];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      "mutationKey" in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof apiBooksPost>>,
-    { data: NonReadonly<BookJsonld> }
-  > = (props) => {
-    const { data } = props ?? {};
-
-    return apiBooksPost(data, requestOptions);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type ApiBooksPostMutationResult = NonNullable<
-  Awaited<ReturnType<typeof apiBooksPost>>
->;
-export type ApiBooksPostMutationBody = NonReadonly<BookJsonld>;
-export type ApiBooksPostMutationError =
-  | ErrorJsonld
-  | Error
-  | ConstraintViolationJsonldJsonld
-  | ConstraintViolationJson;
-
-/**
- * @summary Creates a Book resource.
- */
-export const useApiBooksPost = <
-  TError =
-    | ErrorJsonld
-    | Error
-    | ConstraintViolationJsonldJsonld
-    | ConstraintViolationJson,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof apiBooksPost>>,
-      TError,
-      { data: NonReadonly<BookJsonld> },
-      TContext
-    >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-  queryClient?: QueryClient,
-): UseMutationResult<
-  Awaited<ReturnType<typeof apiBooksPost>>,
-  TError,
-  { data: NonReadonly<BookJsonld> },
-  TContext
-> => {
-  const mutationOptions = getApiBooksPostMutationOptions(options);
-
-  return useMutation(mutationOptions, queryClient);
-};
 /**
  * Retrieves a Book resource.
  * @summary Retrieves a Book resource.
@@ -440,7 +187,7 @@ export type apiBooksIdGetResponse =
   | apiBooksIdGetResponseError;
 
 export const getApiBooksIdGetUrl = (id: string) => {
-  return `http://localhost:3000/books/${id}`;
+  return `https://localhost:3000/books/${id}`;
 };
 
 export const apiBooksIdGet = async (
@@ -452,139 +199,6 @@ export const apiBooksIdGet = async (
     method: "GET",
   });
 };
-
-export const getApiBooksIdGetQueryKey = (id?: string) => {
-  return [`http://localhost:3000/books/${id}`] as const;
-};
-
-export const getApiBooksIdGetQueryOptions = <
-  TData = Awaited<ReturnType<typeof apiBooksIdGet>>,
-  TError = ErrorJsonld | Error,
->(
-  id: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof apiBooksIdGet>>, TError, TData>
-    >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
-
-  const queryKey = queryOptions?.queryKey ?? getApiBooksIdGetQueryKey(id);
-
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof apiBooksIdGet>>> = ({
-    signal,
-  }) => apiBooksIdGet(id, { signal, ...requestOptions });
-
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!id,
-    ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof apiBooksIdGet>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type ApiBooksIdGetQueryResult = NonNullable<
-  Awaited<ReturnType<typeof apiBooksIdGet>>
->;
-export type ApiBooksIdGetQueryError = ErrorJsonld | Error;
-
-export function useApiBooksIdGet<
-  TData = Awaited<ReturnType<typeof apiBooksIdGet>>,
-  TError = ErrorJsonld | Error,
->(
-  id: string,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof apiBooksIdGet>>, TError, TData>
-    > &
-      Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof apiBooksIdGet>>,
-          TError,
-          Awaited<ReturnType<typeof apiBooksIdGet>>
-        >,
-        "initialData"
-      >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-  queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useApiBooksIdGet<
-  TData = Awaited<ReturnType<typeof apiBooksIdGet>>,
-  TError = ErrorJsonld | Error,
->(
-  id: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof apiBooksIdGet>>, TError, TData>
-    > &
-      Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof apiBooksIdGet>>,
-          TError,
-          Awaited<ReturnType<typeof apiBooksIdGet>>
-        >,
-        "initialData"
-      >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useApiBooksIdGet<
-  TData = Awaited<ReturnType<typeof apiBooksIdGet>>,
-  TError = ErrorJsonld | Error,
->(
-  id: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof apiBooksIdGet>>, TError, TData>
-    >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-};
-/**
- * @summary Retrieves a Book resource.
- */
-
-export function useApiBooksIdGet<
-  TData = Awaited<ReturnType<typeof apiBooksIdGet>>,
-  TError = ErrorJsonld | Error,
->(
-  id: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof apiBooksIdGet>>, TError, TData>
-    >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-} {
-  const queryOptions = getApiBooksIdGetQueryOptions(id, options);
-
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-    TData,
-    TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey;
-
-  return query;
-}
 
 /**
  * Removes the Book resource.
@@ -620,7 +234,7 @@ export type apiBooksIdDeleteResponse =
   | apiBooksIdDeleteResponseError;
 
 export const getApiBooksIdDeleteUrl = (id: string) => {
-  return `http://localhost:3000/books/${id}`;
+  return `https://localhost:3000/books/${id}`;
 };
 
 export const apiBooksIdDelete = async (
@@ -633,77 +247,6 @@ export const apiBooksIdDelete = async (
   });
 };
 
-export const getApiBooksIdDeleteMutationOptions = <
-  TError = ErrorJsonld | Error,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof apiBooksIdDelete>>,
-    TError,
-    { id: string },
-    TContext
-  >;
-  request?: SecondParameter<typeof customFetch>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof apiBooksIdDelete>>,
-  TError,
-  { id: string },
-  TContext
-> => {
-  const mutationKey = ["apiBooksIdDelete"];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      "mutationKey" in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof apiBooksIdDelete>>,
-    { id: string }
-  > = (props) => {
-    const { id } = props ?? {};
-
-    return apiBooksIdDelete(id, requestOptions);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type ApiBooksIdDeleteMutationResult = NonNullable<
-  Awaited<ReturnType<typeof apiBooksIdDelete>>
->;
-
-export type ApiBooksIdDeleteMutationError = ErrorJsonld | Error;
-
-/**
- * @summary Removes the Book resource.
- */
-export const useApiBooksIdDelete = <
-  TError = ErrorJsonld | Error,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof apiBooksIdDelete>>,
-      TError,
-      { id: string },
-      TContext
-    >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-  queryClient?: QueryClient,
-): UseMutationResult<
-  Awaited<ReturnType<typeof apiBooksIdDelete>>,
-  TError,
-  { id: string },
-  TContext
-> => {
-  const mutationOptions = getApiBooksIdDeleteMutationOptions(options);
-
-  return useMutation(mutationOptions, queryClient);
-};
 /**
  * Updates the Book resource.
  * @summary Updates the Book resource.
@@ -762,7 +305,7 @@ export type apiBooksIdPatchResponse =
   | apiBooksIdPatchResponseError;
 
 export const getApiBooksIdPatchUrl = (id: string) => {
-  return `http://localhost:3000/books/${id}`;
+  return `https://localhost:3000/books/${id}`;
 };
 
 export const apiBooksIdPatch = async (
@@ -779,88 +322,4 @@ export const apiBooksIdPatch = async (
     },
     body: JSON.stringify(book),
   });
-};
-
-export const getApiBooksIdPatchMutationOptions = <
-  TError =
-    | ErrorJsonld
-    | Error
-    | ConstraintViolationJsonldJsonld
-    | ConstraintViolationJson,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof apiBooksIdPatch>>,
-    TError,
-    { id: string; data: NonReadonly<Book> },
-    TContext
-  >;
-  request?: SecondParameter<typeof customFetch>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof apiBooksIdPatch>>,
-  TError,
-  { id: string; data: NonReadonly<Book> },
-  TContext
-> => {
-  const mutationKey = ["apiBooksIdPatch"];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      "mutationKey" in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof apiBooksIdPatch>>,
-    { id: string; data: NonReadonly<Book> }
-  > = (props) => {
-    const { id, data } = props ?? {};
-
-    return apiBooksIdPatch(id, data, requestOptions);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type ApiBooksIdPatchMutationResult = NonNullable<
-  Awaited<ReturnType<typeof apiBooksIdPatch>>
->;
-export type ApiBooksIdPatchMutationBody = NonReadonly<Book>;
-export type ApiBooksIdPatchMutationError =
-  | ErrorJsonld
-  | Error
-  | ConstraintViolationJsonldJsonld
-  | ConstraintViolationJson;
-
-/**
- * @summary Updates the Book resource.
- */
-export const useApiBooksIdPatch = <
-  TError =
-    | ErrorJsonld
-    | Error
-    | ConstraintViolationJsonldJsonld
-    | ConstraintViolationJson,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof apiBooksIdPatch>>,
-      TError,
-      { id: string; data: NonReadonly<Book> },
-      TContext
-    >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-  queryClient?: QueryClient,
-): UseMutationResult<
-  Awaited<ReturnType<typeof apiBooksIdPatch>>,
-  TError,
-  { id: string; data: NonReadonly<Book> },
-  TContext
-> => {
-  const mutationOptions = getApiBooksIdPatchMutationOptions(options);
-
-  return useMutation(mutationOptions, queryClient);
 };

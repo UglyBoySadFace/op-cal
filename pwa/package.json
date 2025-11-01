@@ -12,6 +12,7 @@
     "@api-platform/admin": "^4.0.7",
     "@emotion/cache": "^11.14.0",
     "@fontsource/poppins": "^5.2.6",
+    "@mui/icons-material": "^7.3.4",
     "@mui/material": "^7.3.4",
     "@mui/material-nextjs": "^7.3.3",
     "@tailwindcss/forms": "^0.5.10",

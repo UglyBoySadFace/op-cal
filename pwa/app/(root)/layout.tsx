@@ -3,6 +3,9 @@
 import React from 'react';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
+import MainLayout from '../../src/components/layout/MainLayout';
+import CustomThemeProvider from '../../src/components/theme/ThemeProvider';
+import '../globals.css';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,7 +25,11 @@ export default function Providers({children}: { children: React.ReactNode }) {
     <body>
     <AppRouterCacheProvider>
       <QueryClientProvider client={queryClient}>
-        {children}
+        <CustomThemeProvider>
+          <MainLayout>
+            {children}
+          </MainLayout>
+        </CustomThemeProvider>
       </QueryClientProvider>
     </AppRouterCacheProvider>
     </body>

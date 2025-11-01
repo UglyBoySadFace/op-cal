@@ -6,8 +6,8 @@ export default defineConfig({
       mode: 'tags-split',
       target: 'src/api/api-client.ts',
       schemas: 'src/api/models',
-      client: 'react-query',
-      baseUrl: 'http://localhost:3000',
+      client: 'fetch',
+      baseUrl: 'https://localhost:3000',
       mock: true,
       prettier: true,
       override: {
